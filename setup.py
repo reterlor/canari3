@@ -81,29 +81,6 @@ extras = [
     'readline'
 ]
 
-requires = [
-    'mr.bob',
-    'flask',
-    'Twisted',
-    'pyopenssl',
-    'service_identity',
-    'pyasn1',
-    'boto3',
-    'safedexml',
-    'lxml',
-    'six',
-    'future',
-    'click',
-    'colorama',
-    'stringcase'
-]
-
-if sys.platform == 'win32':
-    requires.append('pyreadline')
-    # scripts.extend(['%s.bat' % s for s in scripts])
-# else:
-#     scripts.append('pysudo')
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 import canari
 
@@ -119,7 +96,6 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
-    install_requires=requires,
     dependency_links=[],
     url='https://github.com/redcanari/canari',
     # scripts=[os.path.join('scripts', s) for s in scripts],
