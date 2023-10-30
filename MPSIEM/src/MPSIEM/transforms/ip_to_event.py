@@ -1,5 +1,6 @@
 from MPSIEMprovider import MPSIEMqueries
-from canari.maltego.entities import   Event, IPv4Address
+from canari.maltego.entities import IPv4Address
+from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
 
@@ -24,17 +25,17 @@ class ip_to_event(Transform):
         else:
             count = 12
         for i in range(0,count):
-            row=service_events.iloc[i]
+            row = service_events.iloc[i]
             response += Event(
-                id=row['uuid'],
-                account=row['object.account.name'],
-                time=row['time'],
-                msgid=row['msgid'],
-                NewProcessName=row['object.name'],
-                text=row['text'],
-                ip=row['src.ip'],
-                port=row['src.port'],
-                notes=row['text'],
+                id = row['uuid'],
+                account = row['object.account.name'],
+                time = row['time'],
+                msgid = row['msgid'],
+                NewProcessName = row['object.name'],
+                text = row['text'],
+                ip = row['src.ip'],
+                port = row['src.port'],
+                notes = row['text'],
                 start_time = start_time,
                 end_time = end_time,
                 host = url,

@@ -1,6 +1,7 @@
 
-from canari.maltego.entities import Alias, Event
+from canari.maltego.entities import Alias
 from canari.maltego.transform import Transform
+from MPSIEM.transforms.common.entities import Event
 from canari.framework import EnableDebugWindow
 from MPSIEMprovider import MPSIEMqueries
 @EnableDebugWindow
@@ -27,15 +28,15 @@ class user_to_event(Transform):
         for i in range(0,count):
             row=service_events.iloc[i]
             response += Event(
-                id=row['uuid'],
-                account=row['object.account.name'],
-                time=row['time'],
-                msgid=row['msgid'],
-                NewProcessName=row['object.name'],
-                text=row['text'],
-                ip=row['src.ip'],
-                port=row['src.port'],
-                notes=row['text'],
+                id = row['uuid'],
+                account = row['object.account.name'],
+                time = row['time'],
+                msgid = row['msgid'],
+                NewProcessName = row['object.name'],
+                text = row['text'],
+                ip = row['src.ip'],
+                port = row['src.port'],
+                notes = row['text'],
                 start_time = start_time,
                 end_time = end_time,
                 host = url,

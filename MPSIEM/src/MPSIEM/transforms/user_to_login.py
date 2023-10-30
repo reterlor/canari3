@@ -24,10 +24,10 @@ class user_to_login(Transform):
         else:
             count = 12
         for i in range(0,count):
-            row=service_events.iloc[i]
+            row = service_events.iloc[i]
             response += AS(
-                value=row['event_src.asset'],
-                ip=row['src.ip'],
+                value = row['event_src.asset'],
+                ip = row['src.ip'],
                 start_time = start_time,
                 end_time = end_time,
                 host = url,

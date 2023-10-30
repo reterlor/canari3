@@ -1,8 +1,8 @@
 from MPSIEMprovider import MPSIEMqueries
-from canari.maltego.entities import   Event, Phrase, AS
+from MPSIEM.transforms.common.entities import Event
+from canari.maltego.entities import Phrase, AS
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
-from canari.maltego.message import Bookmark
 @EnableDebugWindow
 class pdql_request(Transform):
 
@@ -20,17 +20,17 @@ class pdql_request(Transform):
         session.connect(host=url, username=login, password=password)
         service_events = (session.event_query(query=pdql,time_start=start_time,time_end=end_time,count=12))
         for i in range(0,len(service_events.index)):
-            row=service_events.iloc[i]
+            row = service_events.iloc[i]
             response += Event(
-                id=row['uuid'],
-                account=row['object.account.name'],
-                time=row['time'],
-                msgid=row['msgid'],
-                NewProcessName=row['object.name'],
-                text=row['text'],
-                ip=row['src.ip'],
-                port=row['src.port'],
-                notes=row['text'],
+                id = row['uuid'],
+                account = row['object.account.name'],
+                time = row['time'],
+                msgid = row['msgid'],
+                NewProcessName = row['object.name'],
+                text = row['text'],
+                ip = row['src.ip'],
+                port = row['src.port'],
+                notes = row['text'],
                 start_time = start_time,
                 end_time = end_time,
                 host = url,

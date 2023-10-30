@@ -21,3 +21,33 @@ class Start(Entity):
     login = StringEntityField('login', display_name='login')
     password = StringEntityField('password', display_name='password')
 
+class Incident(Entity):
+    _category_ = 'PT'
+    _namespace_ = 'ptsecurity'
+    
+    name = StringEntityField('properties.name', display_name='Incident name', is_value=True)
+    start_time = StringEntityField('start_time', display_name='Time_start')
+    end_time = StringEntityField('end_time', display_name='Time_end')
+    host = StringEntityField('host', display_name='MPSIEM_url')
+    login = StringEntityField('login', display_name='login')
+    password = StringEntityField('password', display_name='password')
+
+class Event(Entity):
+    _category_ = 'PT'
+    _namespace_ = 'ptsecurity'
+
+    id = StringEntityField('event.id', display_name='uuid', is_value=True)
+    asset = StringEntityField('asset', display_name='asset')
+    account = StringEntityField('event.account', display_name='account')
+    time = StringEntityField('event.time', display_name='time')
+    NewProcessName = StringEntityField('event.NewProcessName', display_name='NewProcessName')
+    text = StringEntityField('event.text', display_name='text')
+    ip = StringEntityField('event.ip', display_name='ip')
+    port = StringEntityField('event.port', display_name='port')
+    notes = StringEntityField('notes#', display_name='Notes')
+    start_time = StringEntityField('start_time', display_name='Time_start')
+    end_time = StringEntityField('end_time', display_name='Time_end')
+    host = StringEntityField('host', display_name='MPSIEM_url')
+    login = StringEntityField('login', display_name='login')
+    password = StringEntityField('password', display_name='password')
+

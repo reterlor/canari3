@@ -1,5 +1,6 @@
 from MPSIEMprovider import MPSIEMqueries
-from canari.maltego.entities import   AS, Incident
+from canari.maltego.entities import AS
+from MPSIEM.transforms.common.entities import Incident
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
 
@@ -20,7 +21,7 @@ class incident_to_asset(Transform):
         session.connect(host=url, username=login, password=password)
         service_events = session.incident_query(id=incident_id)['targets']['assets']
         if len(service_events) > 12:
-            service_events=service_events[:12]
+            service_events = service_events[:12]
         for i in service_events:
             response += AS(
                 value=i['id'],

@@ -1,5 +1,5 @@
 from MPSIEMprovider import MPSIEMqueries
-from canari.maltego.entities import   Event, Incident
+from MPSIEM.transforms.common.entities import Incident, Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
 
@@ -20,7 +20,7 @@ class incident_to_event(Transform):
         session.connect(host=url, username=login, password=password)
         service_events = session.incident_query(id=incident_id,time_start=start_time,time_end=end_time)['events']
         if len(service_events) > 12:
-            service_events=service_events[:12]
+            service_events = service_events[:12]
         for i in service_events:
             response += Event(
                 id=i['id'],
