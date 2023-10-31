@@ -1,5 +1,5 @@
 from MPSIEMprovider import MPSIEMqueries
-from canari.maltego.entities import   Alias, Port, IPv4Address
+from canari.maltego.entities import   Alias, Port, IPv4Address, AS
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
@@ -19,6 +19,7 @@ class extract_event_info(Transform):
         password = entity.password
         port = entity.port
         ip = entity.ip
+        asset = entity.asset
         if not account:
             uuid = entity.value
             session = MPSIEMqueries.session()
@@ -71,4 +72,22 @@ class extract_event_info(Transform):
                 response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
         else:
             response += IPv4Address(number=ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
+        if not asset:
+            if not service_events.empty:
+                if service_events['event_src.asset'].values[0] == None:
+                    value_asset='None'
+                else:
+                    value_asset = service_events['event_src.asset'].values[0]
+            else:
+                uuid = entity.value
+                session = MPSIEMqueries.session()
+                session.connect(host=url, username=login, password=password)
+                service_events = (session.event_query(query='uuid = {}'.format(uuid),count=1, time_start = start_time, time_end=end_time))
+                if service_events['event_src.asset'].values[0] == None:
+                    value_asset='None'
+                else:
+                    value_asset = service_events['event_src.asset'].values[0]
+            response += AS(value=value_asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+        else:
+            response += AS(number=asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
         return response
