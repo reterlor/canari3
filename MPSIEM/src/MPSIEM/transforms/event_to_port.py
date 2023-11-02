@@ -3,6 +3,7 @@ from canari.maltego.entities import Port
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class event_to_port(Transform):
@@ -14,9 +15,9 @@ class event_to_port(Transform):
         port = entity.port
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         if not port:
             uuid = entity.value
             session = MPSIEMqueries.session()
@@ -26,7 +27,7 @@ class event_to_port(Transform):
                 value_port = 0
             else:
                 value_port = service_events['src.port'].values[0]
-            response += Port(value=value_port, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += Port(value=value_port, start_time = start_time, end_time = end_time)
         else:
-            response += Port(number=port, start_time = start_time, end_time = end_time, host = url, login = login, password = password)  
+            response += Port(number=port, start_time = start_time, end_time = end_time)  
         return response

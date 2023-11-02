@@ -2,6 +2,7 @@ from MPSIEMprovider import MPSIEMqueries
 from canari.maltego.entities import  Alias, AS
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class asset_to_logged_user(Transform):
@@ -14,9 +15,9 @@ class asset_to_logged_user(Transform):
         name = asset.value
         start_time = asset.start_time
         end_time = asset.end_time
-        url = asset.host
-        login = asset.login
-        password = asset.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         session = MPSIEMqueries.session()
         session.connect(host=url, username=login, password=password)
         service_events = (session.event_query(query='msgid = 4624 and event_src.asset=\'{}\''.format(name),time_start=start_time, time_end=end_time)).drop_duplicates('subject.name')
@@ -29,9 +30,6 @@ class asset_to_logged_user(Transform):
             response += Alias(
                     alias=row['subject.name'],
                     start_time = start_time,
-                    end_time = end_time,
-                    host = url,
-                    login = login,
-                    password = password
+                    end_time = end_time
                             )
         return response

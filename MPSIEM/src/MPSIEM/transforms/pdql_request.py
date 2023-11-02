@@ -3,6 +3,8 @@ from MPSIEM.transforms.common.entities import Event
 from canari.maltego.entities import Phrase, AS
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
+
 @EnableDebugWindow
 class pdql_request(Transform):
 
@@ -13,9 +15,9 @@ class pdql_request(Transform):
         pdql = entity.text
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         session = MPSIEMqueries.session()
         session.connect(host=url, username=login, password=password)
         service_events = (session.event_query(query=pdql,time_start=start_time,time_end=end_time,count=12))
@@ -32,9 +34,6 @@ class pdql_request(Transform):
                 port = row['src.port'],
                 notes = row['text'],
                 start_time = start_time,
-                end_time = end_time,
-                host = url,
-                login = login,
-                password = password
+                end_time = end_time
                             )
         return response

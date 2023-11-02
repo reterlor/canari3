@@ -3,6 +3,7 @@ from canari.maltego.entities import   IPv4Address
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class event_to_ip(Transform):
@@ -14,9 +15,9 @@ class event_to_ip(Transform):
         ip = entity.ip
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         if not ip:
             uuid = entity.value
             session = MPSIEMqueries.session()
@@ -26,7 +27,7 @@ class event_to_ip(Transform):
                 value_ip = 'None'
             else:
                 value_ip = service_events['src.ip'].values[0]
-            response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time)
         else:
-            response += IPv4Address(number=ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
+            response += IPv4Address(number=ip, start_time = start_time, end_time = end_time) 
         return response

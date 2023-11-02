@@ -115,9 +115,6 @@ class IPv4Address(Entity):
     internal = BooleanEntityField('ipaddress.internal', display_name='Internal')
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
-    host = StringEntityField('host', display_name='MPSIEM_url')
-    login = StringEntityField('login', display_name='login')
-    password = StringEntityField('password', display_name='password')
 
 
 class Netblock(Entity):
@@ -132,9 +129,6 @@ class AS(Entity):
     ip = StringEntityField('ip', display_name='IP')
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
-    host = StringEntityField('host', display_name='MPSIEM_url')
-    login = StringEntityField('login', display_name='login')
-    password = StringEntityField('password', display_name='password')
 
 class Website(Entity):
     _category_ = 'Infrastructure'
@@ -156,10 +150,6 @@ class Phrase(Entity):
     text = StringEntityField('text', display_name='Text', is_value=True)
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
-    host = StringEntityField('host', display_name='MPSIEM_url')
-    login = StringEntityField('login', display_name='login')
-    password = StringEntityField('password', display_name='password')
-
 
 class Document(Entity):
     _category_ = 'Personal'
@@ -283,9 +273,6 @@ class Alias(Entity):
     alias = StringEntityField('properties.alias', display_name='Alias', is_value=True)
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
-    host = StringEntityField('host', display_name='MPSIEM_url')
-    login = StringEntityField('login', display_name='login')
-    password = StringEntityField('password', display_name='password')
 
 
 class File(Entity):
@@ -310,9 +297,6 @@ class Port(Entity):
     number = StringEntityField('port.number', display_name='Ports', is_value=True)
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
-    host = StringEntityField('host', display_name='MPSIEM_url')
-    login = StringEntityField('login', display_name='login')
-    password = StringEntityField('password', display_name='password')
 
 
 class Service(Entity):

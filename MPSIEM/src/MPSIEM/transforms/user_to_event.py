@@ -4,6 +4,8 @@ from canari.maltego.transform import Transform
 from MPSIEM.transforms.common.entities import Event
 from canari.framework import EnableDebugWindow
 from MPSIEMprovider import MPSIEMqueries
+import os
+
 @EnableDebugWindow
 class user_to_event(Transform):
 
@@ -15,9 +17,9 @@ class user_to_event(Transform):
         name = alias.value
         start_time = alias.start_time
         end_time = alias.end_time
-        url = alias.host
-        login = alias.login
-        password = alias.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         session = MPSIEMqueries.session()
         session.connect(host=url, username=login, password=password)
         service_events = session.event_query(query=('object.account.name = \'{}\''.format(name)),time_start=start_time,time_end=end_time, count=12)
@@ -38,9 +40,6 @@ class user_to_event(Transform):
                 port = row['src.port'],
                 notes = row['text'],
                 start_time = start_time,
-                end_time = end_time,
-                host = url,
-                login = login,
-                password = password
+                end_time = end_time
                             )
         return response

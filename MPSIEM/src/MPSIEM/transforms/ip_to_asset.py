@@ -2,6 +2,7 @@ from MPSIEMprovider import MPSIEMqueries
 from canari.maltego.entities import   AS, IPv4Address
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class ip_to_asset(Transform):
@@ -13,9 +14,9 @@ class ip_to_asset(Transform):
         ip = entity.value
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         session = MPSIEMqueries.session()
         session.connect(host=url, username=login, password=password)
         service_events = (session.event_query(query='src.ip = {}'.format(ip),count = 1))
@@ -24,9 +25,6 @@ class ip_to_asset(Transform):
                 value = row['event_src.asset'], 
                 ip = ip,                
                 start_time = start_time,
-                end_time = end_time,
-                host = url,
-                login = login,
-                password = password
+                end_time = end_time
                     )
         return response

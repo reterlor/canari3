@@ -3,6 +3,7 @@ from canari.maltego.entities import   Alias
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class event_to_user(Transform):
@@ -14,9 +15,9 @@ class event_to_user(Transform):
         account = entity.account
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         if not account:
             uuid = entity.value
             session = MPSIEMqueries.session()
@@ -26,7 +27,7 @@ class event_to_user(Transform):
                 value_alias = 'None'
             else:
                 value_alias = service_events['subject.name'].values[0]
-            response += Alias(value=value_alias, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += Alias(value=value_alias, start_time = start_time, end_time = end_time)
         else:
-            response += Alias(value=account, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += Alias(value=account, start_time = start_time, end_time = end_time)
         return response

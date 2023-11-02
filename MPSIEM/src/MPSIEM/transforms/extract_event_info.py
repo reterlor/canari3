@@ -3,6 +3,7 @@ from canari.maltego.entities import   Alias, Port, IPv4Address, AS
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class extract_event_info(Transform):
@@ -14,9 +15,9 @@ class extract_event_info(Transform):
         account = entity.account
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         port = entity.port
         ip = entity.ip
         asset = entity.asset
@@ -29,9 +30,9 @@ class extract_event_info(Transform):
                 value_alias = 'None'
             else:
                 value_alias = service_events['subject.name'].values[0]
-            response += Alias(value=value_alias, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += Alias(value=value_alias, start_time = start_time, end_time = end_time)
         else:
-            response += Alias(value=account, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += Alias(value=account, start_time = start_time, end_time = end_time)
 
         if not port:
             if not service_events.empty:
@@ -39,7 +40,7 @@ class extract_event_info(Transform):
                     value_port= 0
                 else:
                     value_port = service_events['src.port'].values[0]
-                response += Port(value=value_port, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+                response += Port(value=value_port, start_time = start_time, end_time = end_time)
             else:  
                 uuid = entity.value
                 session = MPSIEMqueries.session()
@@ -49,9 +50,9 @@ class extract_event_info(Transform):
                     value_port = 0
                 else:
                     value_port = service_events['src.port'].values[0]
-                response += Port(value=value_port, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+                response += Port(value=value_port, start_time = start_time, end_time = end_time)
         else:
-            response += Port(number=port, start_time = start_time, end_time = end_time, host = url, login = login, password = password)        
+            response += Port(number=port, start_time = start_time, end_time = end_time)        
 
         if not ip:
             if not service_events.empty:
@@ -59,7 +60,7 @@ class extract_event_info(Transform):
                     value_ip = 'None'
                 else:
                     value_ip = service_events['src.ip'].values[0]
-                response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+                response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time)
             else:  
                 uuid = entity.value
                 session = MPSIEMqueries.session()
@@ -69,9 +70,9 @@ class extract_event_info(Transform):
                     value_ip = 'None'
                 else:
                     value_ip = service_events['src.ip'].values[0]
-                response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+                response += IPv4Address(value=value_ip, start_time = start_time, end_time = end_time)
         else:
-            response += IPv4Address(number=ip, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
+            response += IPv4Address(number=ip, start_time = start_time, end_time = end_time) 
         if not asset:
             if not service_events.empty:
                 if service_events['event_src.asset'].values[0] == None:
@@ -87,7 +88,7 @@ class extract_event_info(Transform):
                     value_asset='None'
                 else:
                     value_asset = service_events['event_src.asset'].values[0]
-            response += AS(value=value_asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += AS(value=value_asset, start_time = start_time, end_time = end_time)
         else:
-            response += AS(number=asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
+            response += AS(number=asset, start_time = start_time, end_time = end_time) 
         return response

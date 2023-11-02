@@ -3,6 +3,7 @@ from canari.maltego.entities import   AS
 from MPSIEM.transforms.common.entities import Event
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
+import os
 
 @EnableDebugWindow
 class event_to_asset(Transform):
@@ -14,9 +15,9 @@ class event_to_asset(Transform):
         asset = entity.asset
         start_time = entity.start_time
         end_time = entity.end_time
-        url = entity.host
-        login = entity.login
-        password = entity.password
+        url = os.getenv('MPSIEM_URL')
+        login = os.getenv('MPSIEM_LOGIN')
+        password = os.getenv('MPSIEM_PASSWORD')
         if not asset:
             uuid = entity.value
             session = MPSIEMqueries.session()
@@ -26,7 +27,7 @@ class event_to_asset(Transform):
                 value_asset='None'
             else:
                 value_asset = service_events['event_src.asset'].values[0]
-            response += AS(value=value_asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password)
+            response += AS(value=value_asset, start_time = start_time, end_time = end_time)
         else:
-            response += AS(number=asset, start_time = start_time, end_time = end_time, host = url, login = login, password = password) 
+            response += AS(number=asset, start_time = start_time, end_time = end_time) 
         return response
