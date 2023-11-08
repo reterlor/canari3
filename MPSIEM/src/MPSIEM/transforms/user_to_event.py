@@ -40,6 +40,7 @@ class user_to_event(Transform):
                 port = row['src.port'],
                 notes = row['text'],
                 start_time = start_time,
-                end_time = end_time
+                end_time = end_time,
+                process = row['object.process.name']
                             )
         return response

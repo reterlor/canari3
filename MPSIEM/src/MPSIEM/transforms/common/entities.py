@@ -40,5 +40,12 @@ class Event(Entity):
     notes = StringEntityField('notes#', display_name='Notes')
     start_time = StringEntityField('start_time', display_name='Time_start')
     end_time = StringEntityField('end_time', display_name='Time_end')
+    process = StringEntityField('event.process', display_name='Process')
 
 
+class Process(Entity):
+    _category_ = 'PT'
+    _namespace_ = 'ptsecurity'
+    id = StringEntityField('properties.Name', display_name='uuid', is_value=True)
+    start_time = StringEntityField('start_time', display_name='Time_start')
+    end_time = StringEntityField('end_time', display_name='Time_end')

@@ -1,18 +1,17 @@
 from MPSIEMprovider import MPSIEMqueries
-from MPSIEM.transforms.common.entities import Event
-from canari.maltego.entities import Phrase, AS
+from MPSIEM.transforms.common.entities import Event, Process
 from canari.maltego.transform import Transform
 from canari.framework import EnableDebugWindow
 import os
 
 @EnableDebugWindow
-class pdql_request(Transform):
+class process_to_event(Transform):
 
-    input_type = Phrase
+    input_type = Process
 
     def do_transform(self, request, response, config):
         entity = request.entity
-        pdql = entity.text
+        process = entity.value
         start_time = entity.start_time
         end_time = entity.end_time
         url = os.getenv('MPSIEM_URL')
@@ -20,8 +19,12 @@ class pdql_request(Transform):
         password = os.getenv('MPSIEM_PASSWORD')
         session = MPSIEMqueries.session()
         session.connect(host=url, username=login, password=password)
-        service_events = (session.event_query(query=pdql,time_start=start_time,time_end=end_time,count=12))
-        for i in range(0,len(service_events.index)):
+        service_events = (session.event_query(query='object.process.name = \'{}\''.format(process),time_start=start_time,time_end=end_time,count=12))
+        if len(service_events.index) < 12:
+            count = len(service_events.index)
+        else:
+            count = 12
+        for i in range(0,count):
             row = service_events.iloc[i]
             response += Event(
                 id = row['uuid'],

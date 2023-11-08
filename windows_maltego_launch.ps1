@@ -2,9 +2,11 @@ $Env:PATH = Read-Host "Enter Maltego path"
 
 $Env:MPSIEM_URL = Read-Host "Enter mpsiem URL without https://"
 
-$Env:MPSIEM_LOGIN = Read-Host "Enter MPSIEM login"
+$credential = Get-Credential
 
-$Env:MPSIEM_PASSWORD = Read-Host "Enter MPSIEM password"
+$Env:MPSIEM_LOGIN = $credential.GetNetworkCredential().username
+
+$Env:MPSIEM_PASSWORD = $credential.GetNetworkCredential().password
 
 maltego
 
